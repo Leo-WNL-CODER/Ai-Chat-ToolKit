@@ -123,12 +123,23 @@ window.AI_Chat_UI_Toolbar = {
       const list = document.createElement('ul');
       const platform = window.AI_Chat_Core.currentPlatform;
       const prompts = platform ? platform.getPromptElements() : [];
+      const seenTexts = new Set();
 
-      prompts.forEach((p, idx) => {
+      let displayIndex = 1;
+      prompts.forEach((p) => {
+        let rawText = p.textContent.trim();
+        if (!rawText) return;
+        
+        let text = rawText.substring(0, 80);
+        if (rawText.length > 80) text += "...";
+        
+        if (seenTexts.has(text)) return; // Skip duplicates automatically
+        seenTexts.add(text);
+
         const li = document.createElement('li');
-        let text = p.textContent.trim().substring(0, 80);
-        if (p.textContent.trim().length > 80) text += "...";
-        li.textContent = text || "Prompt " + (idx + 1);        // console.log(li.textContent);
+        li.textContent = text || "Prompt " + displayIndex;
+        displayIndex++;
+        
         li.addEventListener('click', () => {
           p.scrollIntoView({ behavior: 'smooth', block: 'center' });
           p.style.transition = 'background-color 0.5s';

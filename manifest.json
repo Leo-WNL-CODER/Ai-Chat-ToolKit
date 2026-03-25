@@ -35,7 +35,6 @@
         "content/main.js"
       ],
       "css": [
-        "content/theme.css",
         "content/toolbar.css",
         "content/highlighter.css",
         "content/platforms/chatgpt.css"

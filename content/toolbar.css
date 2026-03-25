@@ -144,22 +144,19 @@ html.dark .toolbar-btn::after,
    FUNCTIONAL UI STATES (Restored)
    ═══════════════════════════════════════════════════════════ */
 
-/* Global Collapse: hide all AI responses */
-body.ai-toolkit-global-collapsed [data-message-author-role="assistant"],
-body.ai-toolkit-global-collapsed message-content,
-body.ai-toolkit-global-collapsed .font-claude,
-body.ai-toolkit-global-collapsed [data-is-user="false"],
+/* Global Collapse: elegantly hide the dynamically tagged assistant wrapper */
+body.ai-toolkit-global-collapsed .ai-toolkit-assistant-wrapper,
 body.ai-toolkit-global-collapsed .response-container,
-body.ai-toolkit-global-collapsed .model-response-text {
+body.ai-toolkit-global-collapsed [data-is-user="false"]:not(button) {
   display: none !important;
 }
 
-/* Except when explicitly expanded */
+/* Except when individually bypassed by the single collapse button */
 body.ai-toolkit-global-collapsed .ai-toolkit-response-expanded {
   display: block !important;
 }
 
-/* Or explicitly hidden when globally expanded */
+/* Explicit single message shrinking */
 .ai-toolkit-response-hidden {
   display: none !important;
 }

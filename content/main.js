@@ -1,80 +1,47 @@
 window.AI_Chat_Core = {
   currentPlatform: null,
-  
-  themeObserver: null,
-
-  applyTheme: (theme) => {
-    if (!theme) return;
-    
-    // Disconnect old observer if it exists
-    if (window.AI_Chat_Core.themeObserver) {
-      window.AI_Chat_Core.themeObserver.disconnect();
-    }
-
-    const enforceTheme = () => {
-      document.documentElement.classList.remove('light', 'dark', 'ai-toolkit-theme-light', 'ai-toolkit-theme-dark', 'ai-toolkit-theme-minimal');
-      
-      // Forcefully apply our exact theme
-      document.documentElement.classList.add(`ai-toolkit-theme-${theme}`);
-      
-      // Override ChatGPT's fundamental base styling assumption
-      if (theme === 'dark' || theme === 'minimal') {
-        document.documentElement.classList.add('dark');
-        document.documentElement.style.colorScheme = 'dark';
-      } else {
-        document.documentElement.classList.add('light');
-        document.documentElement.style.colorScheme = 'light';
-      }
-    };
-
-    enforceTheme();
-
-    // Create an aggressive lock to prevent ChatGPT's native theme engine from reverting our changes
-    window.AI_Chat_Core.themeObserver = new MutationObserver((mutations) => {
-      let runEnforce = false;
-      for (const m of mutations) {
-        if (m.type === 'attributes' && m.attributeName === 'class') {
-           runEnforce = true;
-           break;
-        }
-      }
-      if (runEnforce) {
-        window.AI_Chat_Core.themeObserver.disconnect();
-        enforceTheme();
-        window.AI_Chat_Core.themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-      }
-    });
-
-    window.AI_Chat_Core.themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
-  },
 
   injectPerMessageCollapse: () => {
     const platform = window.AI_Chat_Core.currentPlatform;
     if (!platform || !platform.injectCollapseButton) return;
 
     const prompts = platform.getPromptElements();
-    const responses = platform.getResponseElements();
+    const responses = platform.getResponseElements ? platform.getResponseElements() : [];
 
     prompts.forEach((promptEl, index) => {
       let targetResponse = null;
-      let next = promptEl.nextElementSibling;
-      while (next) {
-        if (responses.includes(next) || next.querySelector('[data-message-author-role="assistant"]')) {
-          targetResponse = responses.includes(next) ? next : next.querySelector('[data-message-author-role="assistant"]');
-          break;
+
+      // 1. NATIVE CHATGPT STRUCTURE: A user prompt sits inside an <article>, followed immediately by an assistant <article>
+      const promptArticle = promptEl.closest('article') || promptEl.closest('[data-testid^="conversation-turn"]');
+      if (promptArticle && promptArticle.nextElementSibling) {
+        let sibling = promptArticle.nextElementSibling;
+        
+        // Ensure the sibling is actually an assistant response and not just another user prompt
+        if (sibling && !sibling.querySelector('[data-message-author-role="user"]')) {
+           targetResponse = sibling;
         }
-        if (next.tagName === 'MESSAGE-CONTENT' || next.classList.contains('model-response-text')) {
-          targetResponse = next;
-          break;
-        }
-        next = next.nextElementSibling;
       }
 
+      // 2. FALLBACK TRAVERSAL: If ChatGPT changes structure, do a deep DOM walk
+      if (!targetResponse) {
+        let next = promptEl.nextElementSibling;
+        while (next) {
+          if (responses.includes(next) || next.querySelector('[data-message-author-role="assistant"]') || next.classList.contains('model-response-text')) {
+            targetResponse = responses.includes(next) ? next : (next.querySelector('[data-message-author-role="assistant"]') || next);
+            break;
+          }
+          next = next.nextElementSibling;
+        }
+      }
+
+      // 3. FINAL ARRAY MAP: Assuming equal lengths as an absolute last resort
       if (!targetResponse && responses[index]) {
         targetResponse = responses[index];
       }
 
+      // TAG AND INJECT
       if (targetResponse) {
+        targetResponse.classList.add('ai-toolkit-assistant-wrapper');
         platform.injectCollapseButton(promptEl, targetResponse);
       }
     });
@@ -93,18 +60,6 @@ window.AI_Chat_Core = {
     }
     
     if (window.AI_Chat_Core.currentPlatform) {
-      chrome.storage.local.get(['theme'], (result) => {
-        if (result.theme) {
-          window.AI_Chat_Core.applyTheme(result.theme);
-        }
-      });
-
-      chrome.storage.onChanged.addListener((changes, area) => {
-        if (area === 'local' && changes.theme) {
-          window.AI_Chat_Core.applyTheme(changes.theme.newValue);
-        }
-      });
-
       setTimeout(() => {
         if(window.AI_Chat_UI_Toolbar) {
           window.AI_Chat_UI_Toolbar.inject();
