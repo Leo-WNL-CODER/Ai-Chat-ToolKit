@@ -1,76 +1,271 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
 .ai-chat-toolkit-toolbar {
   position: fixed;
   top: 20%;
-  right: 20px;
-  background-color: #ffffff;
-  border: 1px solid #e5e5e5;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  right: 24px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
   z-index: 999999;
-  padding: 4px;
+  padding: 8px;
   user-select: none;
+  font-family: 'Inter', -apple-system, sans-serif;
+  transition: box-shadow 0.2s ease;
 }
 
+.ai-chat-toolkit-toolbar:hover {
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.06);
+}
+
+html.dark .ai-chat-toolkit-toolbar,
+body.dark .ai-chat-toolkit-toolbar,
 [data-theme="dark"] .ai-chat-toolkit-toolbar,
-body[style*="color-scheme: dark"] .ai-chat-toolkit-toolbar,
-html.dark .ai-chat-toolkit-toolbar {
-  background-color: #343541;
-  border-color: #565869;
+.ai-toolkit-theme-dark .ai-chat-toolkit-toolbar {
+  background: rgba(32, 33, 35, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .ai-chat-toolkit-toolbar .drag-handle {
   width: 100%;
-  height: 20px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: grab;
-  color: #888;
-  font-size: 14px;
-  letter-spacing: -2px;
-  margin-bottom: 4px;
+  color: #a1a1a1;
+  margin-bottom: 8px;
+  border-radius: 8px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.ai-chat-toolkit-toolbar .drag-handle:hover {
+  background: rgba(0, 0, 0, 0.05);
+  color: #666;
 }
 
 .ai-chat-toolkit-toolbar .drag-handle:active {
   cursor: grabbing;
 }
 
-.ai-chat-toolkit-toolbar button {
+.toolbar-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toolbar-btn {
   background: transparent;
   border: none;
   cursor: pointer;
-  padding: 10px;
-  border-radius: 6px;
+  padding: 12px;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: #555;
-  transition: background-color 0.2s;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+
+.toolbar-btn:hover {
+  background-color: #f0f4f8;
+  color: #10a37f;
+  transform: translateY(-1px);
+}
+
+.toolbar-btn:active {
+  transform: translateY(1px);
+}
+
+.toolbar-btn.active {
+  background-color: #10a37f;
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(16, 163, 127, 0.3);
+}
+
+html.dark .toolbar-btn,
+.ai-toolkit-theme-dark .toolbar-btn {
+  color: #d1d5db;
+}
+
+html.dark .toolbar-btn:hover,
+.ai-toolkit-theme-dark .toolbar-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: #10a37f;
+}
+
+html.dark .toolbar-btn.active,
+.ai-toolkit-theme-dark .toolbar-btn.active {
+  background-color: #10a37f;
+  color: #ffffff;
+}
+
+/* Tooltip on hover */
+.toolbar-btn::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  right: calc(100% + 16px);
+  top: 50%;
+  transform: translateY(-50%) scale(0.95);
+  background: #222;
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.toolbar-btn:hover::after {
+  opacity: 1;
+  transform: translateY(-50%) scale(1);
+}
+
+html.dark .toolbar-btn::after,
+.ai-toolkit-theme-dark .toolbar-btn::after {
+  background: #fff;
+  color: #222;
+}
+
+/* Removed single collapse button styling to delegate to platform-specific CSS */
+
+/* ═══════════════════════════════════════════════════════════
+   FUNCTIONAL UI STATES (Restored)
+   ═══════════════════════════════════════════════════════════ */
+
+/* Global Collapse: hide all AI responses */
+body.ai-toolkit-global-collapsed [data-message-author-role="assistant"],
+body.ai-toolkit-global-collapsed message-content,
+body.ai-toolkit-global-collapsed .font-claude,
+body.ai-toolkit-global-collapsed [data-is-user="false"],
+body.ai-toolkit-global-collapsed .response-container,
+body.ai-toolkit-global-collapsed .model-response-text {
+  display: none !important;
+}
+
+/* Except when explicitly expanded */
+body.ai-toolkit-global-collapsed .ai-toolkit-response-expanded {
+  display: block !important;
+}
+
+/* Or explicitly hidden when globally expanded */
+.ai-toolkit-response-hidden {
+  display: none !important;
+}
+
+/* ── Questions Navigator Panel ─────────────────────────────── */
+.ai-chat-toolkit-questions-panel {
+  position: fixed;
+  top: 20%;
+  right: 86px;
+  width: 320px;
+  max-height: 60vh;
+  background: var(--tk-surface);
+  backdrop-filter: blur(20px) saturate(200%);
+  -webkit-backdrop-filter: blur(20px) saturate(200%);
+  border: 1px solid var(--tk-border);
+  border-radius: var(--tk-radius);
+  box-shadow: var(--tk-shadow-lg);
+  display: flex;
+  flex-direction: column;
+  z-index: 999998;
+  font-family: var(--tk-font);
+  color: var(--tk-text);
+  overflow: hidden;
+  animation: panelSlideIn 0.3s var(--tk-ease-out) both;
+}
+
+@keyframes panelSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px) scale(0.96);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.qs-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--tk-border-inner);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.qs-header h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--tk-text);
+}
+
+#close-qs-panel {
+  background: transparent;
+  border: none;
+  color: var(--tk-text-muted);
+  font-size: 20px;
+  cursor: pointer;
+  line-height: 1;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  transition: background 0.2s, color 0.2s;
+}
+
+#close-qs-panel:hover {
+  background: rgba(255, 75, 75, 0.1);
+  color: #ff4b4b;
+}
+
+.ai-chat-toolkit-questions-panel ul {
+  list-style: none;
+  margin: 0;
+  padding: 8px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.ai-chat-toolkit-questions-panel ul::-webkit-scrollbar {
+  width: 5px;
+}
+
+.ai-chat-toolkit-questions-panel ul::-webkit-scrollbar-thumb {
+  background: var(--tk-border-inner);
+  border-radius: 10px;
+}
+
+.ai-chat-toolkit-questions-panel li {
+  padding: 10px 12px;
+  font-size: 13px;
+  border-radius: 8px;
+  cursor: pointer;
+  line-height: 1.4;
   margin-bottom: 4px;
+  color: var(--tk-text);
+  transition: background 0.2s, color 0.2s;
+  word-break: break-word;
+  /* Allow text to wrap naturally instead of single line ellipsis for readability */
 }
 
-.ai-chat-toolkit-toolbar button:last-child {
-  margin-bottom: 0;
-}
-
-.ai-chat-toolkit-toolbar button:hover {
-  background-color: #f0f0f0;
-}
-
-.ai-chat-toolkit-toolbar button.active {
-  background-color: #e0f2ec;
-  color: #10a37f;
-}
-
-html.dark .ai-chat-toolkit-toolbar button {
-  color: #ececec;
-}
-html.dark .ai-chat-toolkit-toolbar button:hover {
-  background-color: #40414f;
-}
-html.dark .ai-chat-toolkit-toolbar button.active {
-  background-color: rgba(16, 163, 127, 0.2);
-  color: #10a37f;
+.ai-chat-toolkit-questions-panel li:hover {
+  background: var(--tk-accent-dim);
+  color: var(--tk-accent);
 }

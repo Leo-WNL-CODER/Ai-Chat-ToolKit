@@ -6,7 +6,7 @@
   border-radius: 6px;
   padding: 4px 8px;
   z-index: 1000000;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   transform: translateY(-5px);
   animation: tooltipFadeIn 0.2s ease-out;
 }
@@ -40,8 +40,15 @@
 }
 
 @keyframes tooltipFadeIn {
-  from { opacity: 0; transform: translateY(0); }
-  to { opacity: 1; transform: translateY(-5px); }
+  from {
+    opacity: 0;
+    transform: translateY(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(-5px);
+  }
 }
 
 ::selection {

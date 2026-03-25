@@ -10,9 +10,7 @@
     "scripting"
   ],
   "host_permissions": [
-    "*://chatgpt.com/*",
-    "*://gemini.google.com/*",
-    "*://claude.ai/*"
+    "*://chatgpt.com/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -27,22 +25,20 @@
   "content_scripts": [
     {
       "matches": [
-        "*://chatgpt.com/*",
-        "*://gemini.google.com/*",
-        "*://claude.ai/*"
+        "*://chatgpt.com/*"
       ],
       "js": [
         "content/storage.js",
         "content/platforms/chatgpt.js",
-        "content/platforms/gemini.js",
-        "content/platforms/claude.js",
         "content/highlighter.js",
         "content/toolbar.js",
         "content/main.js"
       ],
       "css": [
+        "content/theme.css",
         "content/toolbar.css",
-        "content/highlighter.css"
+        "content/highlighter.css",
+        "content/platforms/chatgpt.css"
       ]
     }
   ]

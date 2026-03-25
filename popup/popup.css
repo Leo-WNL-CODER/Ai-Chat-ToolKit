@@ -14,6 +14,14 @@
   --panel-bg: #202123;
 }
 
+[data-theme="minimal"] {
+  --bg-color: #fafafa;
+  --text-color: #222222;
+  --primary-color: #000000;
+  --border-color: #eeeeee;
+  --panel-bg: #ffffff;
+}
+
 body {
   width: 250px;
   margin: 0;

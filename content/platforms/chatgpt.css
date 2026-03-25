@@ -1,0 +1,54 @@
+/* ═══════════════════════════════════════════════════════════
+   AI CHAT TOOLKIT — CHATGPT PLATFORM OVERRIDES
+   ═══════════════════════════════════════════════════════════ */
+
+/* Wrap the button natively into ChatGPT's flex row */
+.ai-toolkit-single-collapse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mirror ChatGPT's 32x32px native utility buttons */
+.ai-toolkit-single-collapse-btn {
+  background: transparent;
+  border: none;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #8e8ea0; /* Matches text-token-text-secondary roughly */
+  border-radius: 0.5rem; /* rounded-lg */
+  transition: background-color 0.15s ease, color 0.15s ease;
+  margin-left: 4px;
+}
+
+.ai-toolkit-single-collapse-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke-width: 2;
+}
+
+.ai-toolkit-single-collapse-btn:hover {
+  background-color: rgba(142, 142, 160, 0.15); /* roughly hover:bg-token-bg-secondary */
+  color: #ececec;
+}
+
+.ai-toolkit-single-collapse-btn.collapsed {
+  color: #10a37f;
+}
+
+html.light .ai-toolkit-single-collapse-btn,
+html[class*="light"] .ai-toolkit-single-collapse-btn,
+body[class*="light"] .ai-toolkit-single-collapse-btn {
+  color: #666;
+}
+
+html.light .ai-toolkit-single-collapse-btn:hover,
+html[class*="light"] .ai-toolkit-single-collapse-btn:hover,
+body[class*="light"] .ai-toolkit-single-collapse-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #111;
+}
