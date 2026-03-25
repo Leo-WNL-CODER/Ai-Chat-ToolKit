@@ -1,0 +1,76 @@
+.ai-chat-toolkit-toolbar {
+  position: fixed;
+  top: 20%;
+  right: 20px;
+  background-color: #ffffff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  z-index: 999999;
+  padding: 4px;
+  user-select: none;
+}
+
+[data-theme="dark"] .ai-chat-toolkit-toolbar,
+body[style*="color-scheme: dark"] .ai-chat-toolkit-toolbar,
+html.dark .ai-chat-toolkit-toolbar {
+  background-color: #343541;
+  border-color: #565869;
+}
+
+.ai-chat-toolkit-toolbar .drag-handle {
+  width: 100%;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  color: #888;
+  font-size: 14px;
+  letter-spacing: -2px;
+  margin-bottom: 4px;
+}
+
+.ai-chat-toolkit-toolbar .drag-handle:active {
+  cursor: grabbing;
+}
+
+.ai-chat-toolkit-toolbar button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555;
+  transition: background-color 0.2s;
+  margin-bottom: 4px;
+}
+
+.ai-chat-toolkit-toolbar button:last-child {
+  margin-bottom: 0;
+}
+
+.ai-chat-toolkit-toolbar button:hover {
+  background-color: #f0f0f0;
+}
+
+.ai-chat-toolkit-toolbar button.active {
+  background-color: #e0f2ec;
+  color: #10a37f;
+}
+
+html.dark .ai-chat-toolkit-toolbar button {
+  color: #ececec;
+}
+html.dark .ai-chat-toolkit-toolbar button:hover {
+  background-color: #40414f;
+}
+html.dark .ai-chat-toolkit-toolbar button.active {
+  background-color: rgba(16, 163, 127, 0.2);
+  color: #10a37f;
+}

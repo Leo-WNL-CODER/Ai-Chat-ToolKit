@@ -1,0 +1,49 @@
+{
+  "manifest_version": 3,
+  "name": "AI Chat Productivity Toolkit",
+  "version": "1.0",
+  "description": "Enhance productivity on AI chat platforms by collapsing responses, highlighting text, and more.",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "sidePanel",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://chatgpt.com/*",
+    "*://gemini.google.com/*",
+    "*://claude.ai/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "AI Chat Toolkit"
+  },
+  "side_panel": {
+    "default_path": "sidepanel/sidepanel.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://chatgpt.com/*",
+        "*://gemini.google.com/*",
+        "*://claude.ai/*"
+      ],
+      "js": [
+        "content/storage.js",
+        "content/platforms/chatgpt.js",
+        "content/platforms/gemini.js",
+        "content/platforms/claude.js",
+        "content/highlighter.js",
+        "content/toolbar.js",
+        "content/main.js"
+      ],
+      "css": [
+        "content/toolbar.css",
+        "content/highlighter.css"
+      ]
+    }
+  ]
+}

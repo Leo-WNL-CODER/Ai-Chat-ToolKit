@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="sidepanel.css">
+  <title>Saved Highlights</title>
+</head>
+<body>
+  <div class="header">
+    <h2>Saved Highlights</h2>
+    <input type="text" id="searchInput" placeholder="Search highlights..." />
+  </div>
+  
+  <div class="filter-controls">
+    <select id="platformFilter">
+      <option value="all">All Platforms</option>
+      <option value="chatgpt.com">ChatGPT</option>
+      <option value="claude.ai">Claude</option>
+      <option value="gemini.google.com">Gemini</option>
+    </select>
+    <button id="clearAllBtn" class="danger">Clear All</button>
+  </div>
+  
+  <div id="highlightsList" class="highlights-list">
+    <!-- Highlights injected here -->
+  </div>
+  
+  <script src="sidepanel.js"></script>
+</body>
+</html>
