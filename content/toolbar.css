@@ -127,9 +127,15 @@ html.dark .toolbar-btn.active,
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+@keyframes showTooltipTemporarily {
+  0%   { opacity: 0; transform: translateY(-50%) scale(0.95); }
+  15%  { opacity: 1; transform: translateY(-50%) scale(1); }
+  85%  { opacity: 1; transform: translateY(-50%) scale(1); }
+  100% { opacity: 0; transform: translateY(-50%) scale(0.95); }
+}
+
 .toolbar-btn:hover::after {
-  opacity: 1;
-  transform: translateY(-50%) scale(1);
+  animation: showTooltipTemporarily 1s forwards;
 }
 
 html.dark .toolbar-btn::after,

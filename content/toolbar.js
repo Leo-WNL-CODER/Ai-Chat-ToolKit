@@ -25,7 +25,12 @@ window.AI_Chat_UI_Toolbar = {
     document.body.appendChild(toolbar);
 
     document.getElementById('ai-btn-collapse').addEventListener('click', window.AI_Chat_UI_Toolbar.toggleCollapse);
-    document.getElementById('ai-btn-questions').addEventListener('click', window.AI_Chat_UI_Toolbar.toggleQuestionsOnly);
+    
+    // Toggle logic for the Questions Navigator Panel
+    const qsBtn = document.getElementById('ai-btn-questions');
+    qsBtn.addEventListener('click', window.AI_Chat_UI_Toolbar.toggleQuestionsOnly);
+
+    // Keep auto-close logic mapped solely onto the panel so it doesn't accidentally trigger when moving around the button
 
     let isDragging = false, currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0;
     const dragHandle = toolbar.querySelector('.drag-handle');
@@ -117,8 +122,19 @@ window.AI_Chat_UI_Toolbar = {
 
       const header = document.createElement('div');
       header.className = 'qs-header';
-      header.innerHTML = `<h3>Prompts</h3><button id="close-qs-panel" title="Close">×</button>`;
+      header.innerHTML = `<h3>Questions Navigator</h3>`;
       panel.appendChild(header);
+
+      // Panel Hover Mechanics
+      panel.addEventListener('mouseenter', () => {
+        clearTimeout(window.AI_Chat_UI_Toolbar.hoverTimeout);
+      });
+
+      // Instead of relying on a tiny gap timeout, we just close it smoothly when the mouse explicitly leaves the panel itself!
+      panel.addEventListener('mouseleave', () => {
+        panel.remove();
+        btn.classList.remove('active');
+      });
 
       const list = document.createElement('ul');
       const platform = window.AI_Chat_Core.currentPlatform;
@@ -156,11 +172,6 @@ window.AI_Chat_UI_Toolbar = {
 
       panel.appendChild(list);
       document.body.appendChild(panel);
-
-      document.getElementById('close-qs-panel').addEventListener('click', () => {
-        panel.remove();
-        btn.classList.remove('active');
-      });
     }
   }
 };

@@ -34,11 +34,6 @@ window.AI_Chat_Core = {
         }
       }
 
-      // 3. FINAL ARRAY MAP: Assuming equal lengths as an absolute last resort
-      if (!targetResponse && responses[index]) {
-        targetResponse = responses[index];
-      }
-
       // TAG AND INJECT
       if (targetResponse) {
         targetResponse.classList.add('ai-toolkit-assistant-wrapper');
