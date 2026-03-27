@@ -8,11 +8,15 @@ chrome.runtime.onInstalled.addListener(() => {
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'openSidePanel') {
-    // Attempt to open the side panel
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs.length > 0) {
-        chrome.sidePanel.open({ windowId: tabs[0].windowId });
+        chrome.sidePanel.open({ windowId: tabs[0].windowId })
+          .then(() => sendResponse({ success: true }))
+          .catch((err) => sendResponse({ success: false, error: err.message }));
+      } else {
+        sendResponse({ success: false, error: 'No active tab found' });
       }
     });
+    return true; // Keep message channel open for async response
   }
 });

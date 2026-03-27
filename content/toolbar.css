@@ -1,4 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+:root {
+  --tk-surface: rgba(255, 255, 255, 0.85);
+  --tk-border: rgba(0, 0, 0, 0.08);
+  --tk-border-inner: rgba(0, 0, 0, 0.06);
+  --tk-radius: 16px;
+  --tk-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.05);
+  --tk-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --tk-text: #333;
+  --tk-text-muted: #888;
+  --tk-accent: #10a37f;
+  --tk-accent-dim: rgba(16, 163, 127, 0.08);
+  --tk-ease-out: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html.dark,
+body.dark,
+[data-theme="dark"],
+.ai-toolkit-theme-dark {
+  --tk-surface: rgba(32, 33, 35, 0.85);
+  --tk-border: rgba(255, 255, 255, 0.08);
+  --tk-border-inner: rgba(255, 255, 255, 0.06);
+  --tk-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --tk-text: #e0e0e0;
+  --tk-text-muted: #888;
+  --tk-accent: #10a37f;
+  --tk-accent-dim: rgba(16, 163, 127, 0.12);
+}
 
 .ai-chat-toolkit-toolbar {
   position: fixed;
@@ -15,7 +41,7 @@
   z-index: 999999;
   padding: 8px;
   user-select: none;
-  font-family: 'Inter', -apple-system, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   transition: box-shadow 0.2s ease;
 }
 
@@ -221,12 +247,12 @@ body.ai-toolkit-global-collapsed .ai-toolkit-response-expanded {
 @keyframes panelSlideIn {
   from {
     opacity: 0;
-    transform: translateX(20px) scale(0.96);
+    translate: 12px 0;
   }
 
   to {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    translate: 0 0;
   }
 }
 

@@ -101,9 +101,15 @@ window.AI_Chat_Core = {
         window.AI_Chat_Core.injectPerMessageCollapse();
       }, 2000);
 
-      setInterval(() => {
-        window.AI_Chat_Core.injectPerMessageCollapse();
-      }, 2000);
+      // Use MutationObserver to detect new AI responses instead of polling
+      let collapseDebounceTimer = null;
+      const observer = new MutationObserver(() => {
+        clearTimeout(collapseDebounceTimer);
+        collapseDebounceTimer = setTimeout(() => {
+          window.AI_Chat_Core.injectPerMessageCollapse();
+        }, 500);
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
     }
   }
 };

@@ -88,6 +88,6 @@ window.AI_Chat_Platform.ChatGPT = {
   },
 
   isActive: () => {
-    return window.location.hostname.includes('chatgpt.com');
+    return window.location.hostname.includes('chatgpt.com') || window.location.hostname.includes('chat.openai.com');
   }
 };

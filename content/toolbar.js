@@ -25,26 +25,63 @@ window.AI_Chat_UI_Toolbar = {
     document.body.appendChild(toolbar);
 
     document.getElementById('ai-btn-collapse').addEventListener('click', window.AI_Chat_UI_Toolbar.toggleCollapse);
-    
+
     // Toggle logic for the Questions Navigator Panel
     const qsBtn = document.getElementById('ai-btn-questions');
     qsBtn.addEventListener('click', window.AI_Chat_UI_Toolbar.toggleQuestionsOnly);
 
     // Keep auto-close logic mapped solely onto the panel so it doesn't accidentally trigger when moving around the button
 
-    let isDragging = false, currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0;
+    let isDragging = false, panelWasOpen = false;
+    let currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0;
     const dragHandle = toolbar.querySelector('.drag-handle');
+
+    // Shared helper: place the panel to the left or right of the toolbar
+    // depending on available screen space.
+    window.AI_Chat_UI_Toolbar._positionPanel = (panel) => {
+      const tbRect = toolbar.getBoundingClientRect();
+      const panelW = panel.offsetWidth || 320;
+      const gap = 12;
+      const spaceLeft = tbRect.left;
+      const spaceRight = window.innerWidth - tbRect.right;
+
+      panel.style.top = tbRect.top + 'px';
+      panel.style.right = 'unset';
+
+      if (spaceLeft >= panelW + gap) {
+        // Enough room on the left — default position
+        panel.style.left = (tbRect.left - panelW - gap) + 'px';
+      } else {
+        // Too close to the left edge — flip to the right
+        panel.style.left = (tbRect.right + gap) + 'px';
+      }
+    };
 
     dragHandle.addEventListener('mousedown', (e) => {
       initialX = e.clientX - xOffset;
       initialY = e.clientY - yOffset;
       isDragging = true;
+
+      // Hide panel while dragging; remember if it was open
+      const panel = document.getElementById('ai-chat-toolkit-questions-panel');
+      panelWasOpen = !!panel;
+      if (panel) panel.style.visibility = 'hidden';
     });
+
     document.addEventListener('mouseup', () => {
+      if (!isDragging) return;
       initialX = currentX;
       initialY = currentY;
       isDragging = false;
+
+      // Restore panel at new position if it was open before drag
+      const panel = document.getElementById('ai-chat-toolkit-questions-panel');
+      if (panelWasOpen && panel) {
+        window.AI_Chat_UI_Toolbar._positionPanel(panel);
+        panel.style.visibility = '';
+      }
     });
+
     document.addEventListener('mousemove', (e) => {
       if (isDragging) {
         e.preventDefault();
@@ -53,11 +90,6 @@ window.AI_Chat_UI_Toolbar = {
         xOffset = currentX;
         yOffset = currentY;
         toolbar.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-
-        const panel = document.getElementById('ai-chat-toolkit-questions-panel');
-        if (panel) {
-          panel.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-        }
       }
     });
 
@@ -117,14 +149,13 @@ window.AI_Chat_UI_Toolbar = {
       panel.id = 'ai-chat-toolkit-questions-panel';
       panel.className = 'ai-chat-toolkit-questions-panel';
 
-      const toolbar = document.getElementById('ai-chat-toolkit-toolbar');
-      if (toolbar && toolbar.style.transform) {
-        panel.style.transform = toolbar.style.transform;
-      }
+      // (position is applied after insertion, once we know the panel width)
 
       const header = document.createElement('div');
       header.className = 'qs-header';
-      header.innerHTML = `<h3>Questions Navigator</h3>`;
+      const h3 = document.createElement('h3');
+      h3.textContent = 'Questions Navigator';
+      header.appendChild(h3);
       panel.appendChild(header);
 
       // Panel Hover Mechanics
@@ -147,17 +178,17 @@ window.AI_Chat_UI_Toolbar = {
       prompts.forEach((p) => {
         let rawText = p.textContent.trim();
         if (!rawText) return;
-        
+
         let text = rawText.substring(0, 80);
         if (rawText.length > 80) text += "...";
-        
+
         if (seenTexts.has(text)) return; // Skip duplicates automatically
         seenTexts.add(text);
 
         const li = document.createElement('li');
         li.textContent = text || "Prompt " + displayIndex;
         displayIndex++;
-        
+
         li.addEventListener('click', () => {
           p.scrollIntoView({ behavior: 'smooth', block: 'center' });
           p.style.transition = 'background-color 0.5s';
@@ -174,6 +205,13 @@ window.AI_Chat_UI_Toolbar = {
 
       panel.appendChild(list);
       document.body.appendChild(panel);
+
+      // After insertion the panel has a real width; position it smartly.
+      requestAnimationFrame(() => {
+        if (window.AI_Chat_UI_Toolbar._positionPanel) {
+          window.AI_Chat_UI_Toolbar._positionPanel(panel);
+        }
+      });
     }
   }
 };
