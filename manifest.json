@@ -33,20 +33,15 @@
       "matches": [ "*://gemini.google.com/*" ],
       "css": [ "content/platforms/gemini/gemini.css" ]
     },
-    {
-      "matches": [ "*://claude.ai/*" ],
-      "css": [ "content/platforms/claude/claude.css" ]
-    },
+
     {
       "matches": [
         "*://chatgpt.com/*",
-        "*://gemini.google.com/*",
-        "*://claude.ai/*"
+        "*://gemini.google.com/*"
       ],
       "js": [
         "content/storage.js",
         "content/platforms/chatgpt/chatgpt.js",
-        "content/platforms/claude/claude.js",
         "content/platforms/gemini/gemini.js",
         "content/highlighter.js",
         "content/toolbar.js",

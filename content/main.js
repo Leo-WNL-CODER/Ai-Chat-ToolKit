@@ -70,7 +70,6 @@ window.AI_Chat_Core = {
   init: () => {
     const platforms = [
       window.AI_Chat_Platform.ChatGPT,
-      window.AI_Chat_Platform.Claude,
       window.AI_Chat_Platform.Gemini
     ];
     
