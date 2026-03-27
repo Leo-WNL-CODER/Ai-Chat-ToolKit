@@ -3,10 +3,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-  openSidePanelBtn.addEventListener('click', () => {
-    // Since SidePanel opens via windowId from background service worker/action,
-    // We send a message to background script to trigger it if direct window call fails.
-    chrome.runtime.sendMessage({ action: 'openSidePanel' });
-    window.close();
+  openSidePanelBtn.addEventListener('click', async () => {
+    try {
+      const win = await chrome.windows.getCurrent();
+      await chrome.sidePanel.open({ windowId: win.id });
+      window.close();
+    } catch (e) {
+      console.error('Failed to open side panel:', e);
+    }
   });
 });
