@@ -10,7 +10,9 @@
     "scripting"
   ],
   "host_permissions": [
-    "*://chatgpt.com/*"
+    "*://chatgpt.com/*",
+    "*://gemini.google.com/*",
+    "*://claude.ai/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -24,20 +26,36 @@
   },
   "content_scripts": [
     {
+      "matches": [ "*://chatgpt.com/*" ],
+      "css": [ "content/platforms/chatgpt/chatgpt.css" ]
+    },
+    {
+      "matches": [ "*://gemini.google.com/*" ],
+      "css": [ "content/platforms/gemini/gemini.css" ]
+    },
+    {
+      "matches": [ "*://claude.ai/*" ],
+      "css": [ "content/platforms/claude/claude.css" ]
+    },
+    {
       "matches": [
-        "*://chatgpt.com/*"
+        "*://chatgpt.com/*",
+        "*://gemini.google.com/*",
+        "*://claude.ai/*"
       ],
       "js": [
         "content/storage.js",
-        "content/platforms/chatgpt.js",
+        "content/platforms/chatgpt/chatgpt.js",
+        "content/platforms/claude/claude.js",
+        "content/platforms/gemini/gemini.js",
         "content/highlighter.js",
         "content/toolbar.js",
         "content/main.js"
       ],
       "css": [
+        "content/theme.css",
         "content/toolbar.css",
-        "content/highlighter.css",
-        "content/platforms/chatgpt.css"
+        "content/highlighter.css"
       ]
     }
   ]

@@ -24,18 +24,43 @@ window.AI_Chat_Core = {
 
       // 2. FALLBACK TRAVERSAL: If ChatGPT changes structure, do a deep DOM walk
       if (!targetResponse) {
-        let next = promptEl.nextElementSibling;
-        while (next) {
-          if (responses.includes(next) || next.querySelector('[data-message-author-role="assistant"]') || next.classList.contains('model-response-text')) {
-            targetResponse = responses.includes(next) ? next : (next.querySelector('[data-message-author-role="assistant"]') || next);
-            break;
+          let next = promptEl.nextElementSibling;
+          while(next) {
+            if (responses.includes(next) || next.querySelector('[data-message-author-role="assistant"]')) {
+               targetResponse = responses.includes(next) ? next : next.querySelector('[data-message-author-role="assistant"]');
+               break;
+            }
+            if (next.tagName === 'MESSAGE-CONTENT' || next.classList.contains('model-response-text') || next.querySelector('message-content, .model-response-text')) {
+               targetResponse = (next.tagName === 'MESSAGE-CONTENT' || next.classList.contains('model-response-text')) ? next : next.querySelector('message-content, .model-response-text');
+               break;
+            }
+            next = next.nextElementSibling;
           }
-          next = next.nextElementSibling;
-        }
+
+          if (!targetResponse) {
+            let parent = promptEl.parentElement;
+            while (parent && parent.tagName !== 'BODY' && !targetResponse) {
+               let sibling = parent.nextElementSibling;
+               while(sibling) {
+                 if (responses.includes(sibling) || sibling.querySelector('message-content, [data-message-author-role="assistant"]')) {
+                   targetResponse = responses.includes(sibling) ? sibling : sibling.querySelector('message-content, [data-message-author-role="assistant"]');
+                   break;
+                 }
+                 sibling = sibling.nextElementSibling;
+               }
+               parent = parent.parentElement;
+            }
+          }
+
+          if (!targetResponse && responses[index]) {
+            targetResponse = responses[index];
+          }
       }
 
       // TAG AND INJECT
       if (targetResponse) {
+        targetResponse = targetResponse.closest('.response-container') || targetResponse;
+
         targetResponse.classList.add('ai-toolkit-assistant-wrapper');
         platform.injectCollapseButton(promptEl, targetResponse);
       }
@@ -44,7 +69,9 @@ window.AI_Chat_Core = {
 
   init: () => {
     const platforms = [
-      window.AI_Chat_Platform.ChatGPT
+      window.AI_Chat_Platform.ChatGPT,
+      window.AI_Chat_Platform.Claude,
+      window.AI_Chat_Platform.Gemini
     ];
     
     for (const p of platforms) {
@@ -55,6 +82,16 @@ window.AI_Chat_Core = {
     }
     
     if (window.AI_Chat_Core.currentPlatform) {
+      chrome.storage.local.get(['theme'], (result) => {
+        if (result.theme) document.documentElement.classList.add(`ai-toolkit-theme-${result.theme}`);
+      });
+      chrome.storage.onChanged.addListener((changes, area) => {
+        if (area === 'local' && changes.theme) {
+          document.documentElement.classList.remove('ai-toolkit-theme-light', 'ai-toolkit-theme-dark', 'ai-toolkit-theme-minimal');
+          document.documentElement.classList.add(`ai-toolkit-theme-${changes.theme.newValue}`);
+        }
+      });
+
       setTimeout(() => {
         if(window.AI_Chat_UI_Toolbar) {
           window.AI_Chat_UI_Toolbar.inject();

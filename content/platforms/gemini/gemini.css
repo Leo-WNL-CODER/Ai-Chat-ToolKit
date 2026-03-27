@@ -1,0 +1,59 @@
+/* ═══════════════════════════════════════════════════════════
+   AI CHAT TOOLKIT — GEMINI PLATFORM OVERRIDES
+   ═══════════════════════════════════════════════════════════ */
+
+.ai-toolkit-single-collapse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mirror Gemini's perfectly circular native icon buttons */
+.ai-toolkit-single-collapse-btn {
+  background: transparent !important;
+  border: none !important;
+  width: 36px !important;
+  height: 36px !important;
+  padding: 0 !important;
+  margin: 0 0 0 4px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  color: #444746 !important;
+  border-radius: 50% !important;
+  /* Constant circle ensures it never fluctuates to a square */
+  transition: background-color 0.15s ease, color 0.15s ease, opacity 0.2s !important;
+  outline: none !important;
+  opacity: 0;
+  pointer-events: none;
+  margin-right: 100px;
+}
+
+/* Show only on hover over query */
+.query-content:hover .ai-toolkit-single-collapse-btn,
+.ai-toolkit-single-collapse-btn:focus {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.ai-toolkit-single-collapse-btn:hover {
+  background-color: rgba(68, 71, 70, 0.08) !important;
+  color: #1f1f1f !important;
+}
+
+.ai-toolkit-single-collapse-btn.collapsed {
+  color: #10a37f !important;
+}
+
+/* Gemini Dark Mode Overrides */
+html.dark .ai-toolkit-single-collapse-btn,
+body[class*="dark"] .ai-toolkit-single-collapse-btn {
+  color: #c4c7c5 !important;
+}
+
+html.dark .ai-toolkit-single-collapse-btn:hover,
+body[class*="dark"] .ai-toolkit-single-collapse-btn:hover {
+  background-color: rgba(227, 227, 227, 0.08) !important;
+  color: #e3e3e3 !important;
+}

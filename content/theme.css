@@ -1,0 +1,98 @@
+/* AI Toolkit Global Chatbot Themes */
+
+/* DARK THEME Overrides */
+html.ai-toolkit-theme-dark body {
+  background-color: #1e1e20 !important;
+  color: #e0e0e0 !important;
+}
+
+html.ai-toolkit-theme-dark [class*="bg-white"],
+html.ai-toolkit-theme-dark [class*="bg-gray-50"] {
+  background-color: #1e1e20 !important;
+}
+
+/* Force text colors to be readable in dark mode */
+html.ai-toolkit-theme-dark p,
+html.ai-toolkit-theme-dark h1,
+html.ai-toolkit-theme-dark h2,
+html.ai-toolkit-theme-dark h3,
+html.ai-toolkit-theme-dark h4,
+html.ai-toolkit-theme-dark h5,
+html.ai-toolkit-theme-dark h6,
+html.ai-toolkit-theme-dark li,
+html.ai-toolkit-theme-dark div.markdown,
+html.ai-toolkit-theme-dark [data-message-author-role="assistant"],
+html.ai-toolkit-theme-dark [data-message-author-role="user"] {
+  color: #ececec !important;
+}
+
+/* Let syntax highlighting keep its colors */
+html.ai-toolkit-theme-dark pre,
+html.ai-toolkit-theme-dark code,
+html.ai-toolkit-theme-dark .hljs {
+  color: inherit;
+}
+
+/* LIGHT THEME Overrides */
+html.ai-toolkit-theme-light body {
+  background-color: #ffffff !important;
+  color: #111111 !important;
+}
+
+/* MINIMAL THEME Overrides */
+html.ai-toolkit-theme-minimal body {
+  background-color: #fafafa !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+html.ai-toolkit-theme-minimal.dark body,
+html.ai-toolkit-theme-minimal.ai-toolkit-theme-dark body {
+  background-color: #191919 !important;
+}
+
+/* Fix text in Minimal Dark Theme */
+html.ai-toolkit-theme-minimal.dark p,
+html.ai-toolkit-theme-minimal.ai-toolkit-theme-dark p,
+html.ai-toolkit-theme-minimal.dark li,
+html.ai-toolkit-theme-minimal.ai-toolkit-theme-dark li,
+html.ai-toolkit-theme-minimal.dark div.markdown,
+html.ai-toolkit-theme-minimal.ai-toolkit-theme-dark div.markdown {
+  color: #ececec !important;
+}
+
+/* Hide sidebars across various platforms */
+html.ai-toolkit-theme-minimal nav,
+html.ai-toolkit-theme-minimal [data-testid="sidebar"],
+html.ai-toolkit-theme-minimal .sidebar,
+html.ai-toolkit-theme-minimal side-navigation-drawer {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+}
+
+/* Ensure the main content takes up nice central width */
+html.ai-toolkit-theme-minimal main,
+html.ai-toolkit-theme-minimal [role="main"] {
+  width: 100% !important;
+  max-width: 800px !important;
+  margin: 0 auto !important;
+  border-left: none !important;
+  border-right: none !important;
+  box-shadow: 0 0 40px rgba(0,0,0,0.03) !important;
+  background-color: #ffffff !important;
+}
+
+html.ai-toolkit-theme-minimal.dark main,
+html.ai-toolkit-theme-minimal.ai-toolkit-theme-dark main {
+  background-color: #222222 !important;
+  box-shadow: 0 0 40px rgba(0,0,0,0.3) !important;
+}
+
+/* Clean up input bars */
+html.ai-toolkit-theme-minimal form,
+html.ai-toolkit-theme-minimal .input-area,
+html.ai-toolkit-theme-minimal [data-testid="bottom-bar"] {
+  background: transparent !important;
+  border-top: none !important;
+}
