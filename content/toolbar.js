@@ -91,11 +91,13 @@ window.AI_Chat_UI_Toolbar = {
       if (pathEl) {
         if (isCollapsed) {
           pathEl.setAttribute('d', 'M5 15l7-7 7 7'); // Expand icon
-          ibtn.title = "Expand AI Response";
+          ibtn.setAttribute('data-tooltip', 'Expand AI Response');
+          ibtn.removeAttribute('title');
           ibtn.classList.add('collapsed');
         } else {
           pathEl.setAttribute('d', 'M19 9l-7 7-7-7'); // Collapse icon
-          ibtn.title = "Collapse AI Response";
+          ibtn.setAttribute('data-tooltip', 'Collapse AI Response');
+          ibtn.removeAttribute('title');
           ibtn.classList.remove('collapsed');
         }
       }
